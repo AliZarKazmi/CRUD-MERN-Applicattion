@@ -8,6 +8,6 @@ app.use(express.json()) // conversion
 
 
 //run server
-app.listen(3001,()=>{
+app.listen(3001,()=>{ 
     console.log("server is running")
 })
