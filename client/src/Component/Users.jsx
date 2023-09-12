@@ -1,14 +1,24 @@
-import { useState } from "react"
+import axios from "axios"
+import { useEffect, useState } from "react"
 import {Link} from 'react-router-dom'
 const Users = ()=>
 {
-    const [user,setUser] = useState([
-        {
-            name: 'Ali Zar Kazmi',
-            email: 'alizarkazmi55@gmail.com',
-            age: 21
-        }
-    ])
+    const [user,setUser] = useState([])
+
+    useEffect(()=>{
+        axios.get('http://localhost:3001')
+        .then(result=>setUser(result.data))
+        .catch(error => console.log(error))
+    },[])
+
+    const handleDelete =(id)=>{
+        axios.delete('http://localhost:3001/deleteUser/'+id)
+        .then(result=>{
+            console.log(result)
+            window.location.reload()
+        })
+        .catch(error => console.log(error))
+    }
     return (
         <>
         <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
@@ -26,17 +36,17 @@ const Users = ()=>
             <tbody>
                 {
                     user.map((user)=>{
-                        return <tr> 
+                        return (<tr> 
                              <td>{user.name}</td>
                             <td>{user.email}</td>
                             <td>{user.age}</td>
                             <td>
-                            <Link to='/update' className="btn btn-success">Update</Link>
+                            <Link to={`/update/${user._id}`} className="btn btn-success">Update</Link>
                             </td> 
                             <td>
-                                <button>Delete</button>
+                                <button className="btn btn-danger" onClick={(e)=>handleDelete(user._id)}>Delete</button>
                             </td>
-                        </tr>
+                        </tr>)
                     }
                     
                     )
